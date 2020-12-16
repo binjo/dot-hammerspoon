@@ -147,5 +147,10 @@ end
 --                  start = true
 --                }
 -- )
+function moveToNextScreen()
+  local app = hs.window.focusedWindow()
+  app:moveToScreen(app:screen():next())
+end
+hs.hotkey.bind(hyper, "n", moveToNextScreen)
 
 hs.notify.show("Welcome to Hammerspoon", "Have fun!", "")
