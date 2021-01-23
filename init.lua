@@ -68,23 +68,23 @@ Install:andUse("TextClipboardHistory",
                  }
   )
 
-usbWatcher = nil
-
-function usbDeviceCallback(data)
-    if (data["productName"] == "HHKB Professional") then
-        if (data["eventType"] == "added") then
-            hs.notify.new({title="Hammerspoon", informativeText="Hello HHKB"}):send()
-            ok,result = hs.execute("/Library/Application\\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli --select-profile \"HHKB\"")
-        elseif (data["eventType"] == "removed") then
-            hs.notify.new({title="Hammerspoon", informativeText="Bye HHKB"}):send()
-            ok,result = hs.execute("/Library/Application\\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli --select-profile \"Default\"")
-            -- app:kill()
-        end
-    end
-end
-
-usbWatcher = hs.usb.watcher.new(usbDeviceCallback)
-usbWatcher:start()
+-- usbWatcher = nil
+--
+-- function usbDeviceCallback(data)
+--     if (data["productName"] == "HHKB Professional") then
+--         if (data["eventType"] == "added") then
+--             hs.notify.new({title="Hammerspoon", informativeText="Hello HHKB"}):send()
+--             ok,result = hs.execute("/Library/Application\\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli --select-profile \"HHKB\"")
+--         elseif (data["eventType"] == "removed") then
+--             hs.notify.new({title="Hammerspoon", informativeText="Bye HHKB"}):send()
+--             ok,result = hs.execute("/Library/Application\\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli --select-profile \"Default\"")
+--             -- app:kill()
+--         end
+--     end
+-- end
+--
+-- usbWatcher = hs.usb.watcher.new(usbDeviceCallback)
+-- usbWatcher:start()
 
 -- auto change the im for the application callback
 apps = {
