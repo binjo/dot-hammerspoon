@@ -153,4 +153,15 @@ function moveToNextScreen()
 end
 hs.hotkey.bind(hyper, "n", moveToNextScreen)
 
+function getChromeURL()
+   local res, url = hs.osascript.applescript('tell application "Google Chrome" to get URL of active tab of front window')
+   if res then
+      hs.pasteboard.writeObjects(url)
+      hs.notify.show("Chrome URL scraped", url, "")
+   else
+      hs.notify.show("Failed to scrape URL", "Oooops", "")
+   end
+end
+hs.hotkey.bind(hyper, "l", getChromeURL)
+
 hs.notify.show("Welcome to Hammerspoon", "Have fun!", "")
