@@ -108,6 +108,14 @@ apps = {
       name = 'Microsoft',
       im = 'EN'
    },
+   {
+      name = 'WeChat',
+      im = 'CN'
+   },
+   {
+      name = 'WeCom',
+      im = 'CN'
+   },
 }
 
 function ims(name, etype, app)
@@ -124,7 +132,7 @@ function ims(name, etype, app)
          if (current == nil and string.match (config [1].im, "CN")) then
             hs.keycodes.setMethod("Squirrel")
          elseif (current ~= nil and string.match (config [1].im, "EN")) then
-            hs.keycodes.setLayout("ABC - Extended")
+            hs.keycodes.setLayout("ABC")
          end
       end
    end
