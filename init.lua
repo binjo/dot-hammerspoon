@@ -172,4 +172,11 @@ function getChromeURL()
 end
 hs.hotkey.bind(hyper, "l", getChromeURL)
 
+hs.urlevent.bind("codebrowser", function()
+    local cb = hs.window'codebrowser'
+    if cb then
+       cb:focus()
+    end
+end)
+
 hs.notify.show("Welcome to Hammerspoon", "Have fun!", "")
