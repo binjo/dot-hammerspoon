@@ -176,6 +176,11 @@ hs.urlevent.bind("codebrowser", function()
     local cb = hs.window'codebrowser'
     if cb then
        cb:focus()
+    else
+       cb = hs.window'ghidra'
+       if cb then
+          cb:focus()
+       end
     end
 end)
 
