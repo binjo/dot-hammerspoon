@@ -49,24 +49,24 @@ Install:andUse("TextClipboardHistory",
                }
 )
 
-  Install:andUse("Seal",
-                 {
-                   hotkeys = { show = { hyper, "j" } },
-                   fn = function(s)
+Install:andUse("Seal",
+               {
+                  hotkeys = { show = { hyper, "j" } },
+                  fn = function(s)
                      s:loadPlugins({"apps", "calc", "safari_bookmarks", "screencapture", "useractions"})
                      s.plugins.safari_bookmarks.always_open_with_safari = false
                      s.plugins.useractions.actions =
-                       {
-                             ["Hammerspoon docs webpage"] = {
-                               url = "https://hammerspoon.org/docs/",
-                               icon = hs.image.imageFromName(hs.image.systemImageNames.ApplicationIcon),
-                             },
-                       }
+                        {
+                           ["Hammerspoon docs webpage"] = {
+                              url = "https://hammerspoon.org/docs/",
+                              icon = hs.image.imageFromName(hs.image.systemImageNames.ApplicationIcon),
+                           },
+                        }
                      s:refreshAllCommands()
-                   end,
-                   start = true,
-                 }
-  )
+                  end,
+                  start = true,
+               }
+)
 
 -- usbWatcher = nil
 --
@@ -147,14 +147,6 @@ if hs.fs.attributes(localfile) then
   dofile(localfile)
 end
 
--- Install:andUse("FadeLogo",
---                {
---                  config = {
---                    default_run = 1.0,
---                  },
---                  start = true
---                }
--- )
 function moveToNextScreen()
   local app = hs.window.focusedWindow()
   app:moveToScreen(app:screen():next())
