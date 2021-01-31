@@ -51,20 +51,20 @@ Install:andUse("TextClipboardHistory",
 
 Install:andUse("Seal",
                {
-                  hotkeys = { show = { hyper, "j" } },
-                  fn = function(s)
-                     s:loadPlugins({"apps", "calc", "safari_bookmarks", "screencapture", "useractions"})
-                     s.plugins.safari_bookmarks.always_open_with_safari = false
-                     s.plugins.useractions.actions =
-                        {
+                 hotkeys = { show = { hyper, "j" } },
+                 fn = function(s)
+                   s:loadPlugins({"apps", "calc", "safari_bookmarks", "screencapture", "useractions"})
+                   s.plugins.safari_bookmarks.always_open_with_safari = false
+                   s.plugins.useractions.actions =
+                     {
                            ["Hammerspoon docs webpage"] = {
-                              url = "https://hammerspoon.org/docs/",
-                              icon = hs.image.imageFromName(hs.image.systemImageNames.ApplicationIcon),
+                             url = "https://hammerspoon.org/docs/",
+                             icon = hs.image.imageFromName(hs.image.systemImageNames.ApplicationIcon),
                            },
-                        }
-                     s:refreshAllCommands()
-                  end,
-                  start = true,
+                     }
+                   s:refreshAllCommands()
+                 end,
+                 start = true,
                }
 )
 
@@ -175,5 +175,14 @@ hs.urlevent.bind("codebrowser", function()
        end
     end
 end)
+
+-- Install:andUse("FadeLogo",
+--                {
+--                  config = {
+--                    default_run = 1.0,
+--                  },
+--                  start = true
+--                }
+-- )
 
 hs.notify.show("Welcome to Hammerspoon", "Have fun!", "")

@@ -29,6 +29,9 @@ If you want to learn more about Hammerspoon, check out zzamboni's book [[https:/
 - [[#seal][Seal]]
 - [[#watchers][Watchers]]
 - [[#loading-private-configuration][Loading private configuration]]
+- [[#switch-to-other-window][Switch to other window]]
+- [[#get-chrome-url][Get Chrome URL]]
+- [[#url-callback][URL callback]]
 - [[#end-of-config-animation][End-of-config animation]]
 
 * General variables and configuration
@@ -127,21 +130,21 @@ The [[http://www.hammerspoon.org/Spoons/Seal.html][Seal]] spoon is a powerhouse 
 We start by loading the spoon, and specifying which plugins we want.
 
 #+begin_src lua :noweb no-export
-  Install:andUse("Seal",
-                 {
-                   hotkeys = { show = { hyper, "j" } },
-                   fn = function(s)
-                     s:loadPlugins({"apps", "calc", "safari_bookmarks", "screencapture", "useractions"})
-                     s.plugins.safari_bookmarks.always_open_with_safari = false
-                     s.plugins.useractions.actions =
-                       {
-                           <<useraction-definitions>>
-                       }
-                     s:refreshAllCommands()
-                   end,
-                   start = true,
-                 }
-  )
+Install:andUse("Seal",
+               {
+                 hotkeys = { show = { hyper, "j" } },
+                 fn = function(s)
+                   s:loadPlugins({"apps", "calc", "safari_bookmarks", "screencapture", "useractions"})
+                   s.plugins.safari_bookmarks.always_open_with_safari = false
+                   s.plugins.useractions.actions =
+                     {
+                         <<useraction-definitions>>
+                     }
+                   s:refreshAllCommands()
+                 end,
+                 start = true,
+               }
+)
 #+end_src
 
 The =useractions= Seal plugin allows me to define my own shortcuts. For example, a bookmark to the Hammerspoon documentation page:
@@ -155,26 +158,26 @@ The =useractions= Seal plugin allows me to define my own shortcuts. For example,
 
 * Watchers
 
-I use HHKB, different karabiner profiles needed when it get plugged in.
+I use HHKB, +different karabiner profiles needed when it get plugged in+, karabiner + goku ftw.
 
 #+begin_src lua
-usbWatcher = nil
-
-function usbDeviceCallback(data)
-    if (data["productName"] == "HHKB Professional") then
-        if (data["eventType"] == "added") then
-            hs.notify.new({title="Hammerspoon", informativeText="Hello HHKB"}):send()
-            ok,result = hs.execute("/Library/Application\\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli --select-profile \"HHKB\"")
-        elseif (data["eventType"] == "removed") then
-            hs.notify.new({title="Hammerspoon", informativeText="Bye HHKB"}):send()
-            ok,result = hs.execute("/Library/Application\\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli --select-profile \"Default\"")
-            -- app:kill()
-        end
-    end
-end
-
-usbWatcher = hs.usb.watcher.new(usbDeviceCallback)
-usbWatcher:start()
+-- usbWatcher = nil
+--
+-- function usbDeviceCallback(data)
+--     if (data["productName"] == "HHKB Professional") then
+--         if (data["eventType"] == "added") then
+--             hs.notify.new({title="Hammerspoon", informativeText="Hello HHKB"}):send()
+--             ok,result = hs.execute("/Library/Application\\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli --select-profile \"HHKB\"")
+--         elseif (data["eventType"] == "removed") then
+--             hs.notify.new({title="Hammerspoon", informativeText="Bye HHKB"}):send()
+--             ok,result = hs.execute("/Library/Application\\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli --select-profile \"Default\"")
+--             -- app:kill()
+--         end
+--     end
+-- end
+--
+-- usbWatcher = hs.usb.watcher.new(usbDeviceCallback)
+-- usbWatcher:start()
 #+end_src
 
 For some reason, Squirrel keeps messing my input methods when switching to applications.
@@ -201,6 +204,14 @@ apps = {
       name = 'Microsoft',
       im = 'EN'
    },
+   {
+      name = 'WeChat',
+      im = 'CN'
+   },
+   {
+      name = 'WeCom',
+      im = 'CN'
+   },
 }
 
 function ims(name, etype, app)
@@ -217,7 +228,7 @@ function ims(name, etype, app)
          if (current == nil and string.match (config [1].im, "CN")) then
             hs.keycodes.setMethod("Squirrel")
          elseif (current ~= nil and string.match (config [1].im, "EN")) then
-            hs.keycodes.setLayout("ABC - Extended")
+            hs.keycodes.setLayout("ABC")
          end
       end
    end
@@ -239,9 +250,56 @@ if hs.fs.attributes(localfile) then
 end
 #+end_src
 
+* Switch to other window
+
+Helper function when having multiple screens.
+
+#+begin_src lua
+function moveToNextScreen()
+  local app = hs.window.focusedWindow()
+  app:moveToScreen(app:screen():next())
+end
+hs.hotkey.bind(hyper, "n", moveToNextScreen)
+#+end_src
+
+* Get Chrome URL
+
+=⌘+L= and =⌘+C= would copy URL into clipboard, but focus stay in url bar.
+
+#+begin_src lua
+function getChromeURL()
+   local res, url = hs.osascript.applescript('tell application "Google Chrome" to get URL of active tab of front window')
+   if res then
+      hs.pasteboard.writeObjects(url)
+      hs.notify.show("Chrome URL scraped", url, "")
+   else
+      hs.notify.show("Failed to scrape URL", "Oooops", "")
+   end
+end
+hs.hotkey.bind(hyper, "l", getChromeURL)
+#+end_src
+
+* URL callback
+
+Experimenting url callback, leveraging =karabiner= to trigger.
+
+#+begin_src lua
+hs.urlevent.bind("codebrowser", function()
+    local cb = hs.window'codebrowser'
+    if cb then
+       cb:focus()
+    else
+       cb = hs.window'ghidra'
+       if cb then
+          cb:focus()
+       end
+    end
+end)
+#+end_src
+
 * End-of-config animation
 
-The [[http://www.hammerspoon.org/Spoons/FadeLogo.html][FadeLogo]] spoon simply shows an animation of the Hammerspoon logo to signal the end of the config load.
++The [[http://www.hammerspoon.org/Spoons/FadeLogo.html][FadeLogo]] spoon simply shows an animation of the Hammerspoon logo to signal the end of the config load.+
 
 #+begin_src lua
 -- Install:andUse("FadeLogo",
@@ -254,7 +312,7 @@ The [[http://www.hammerspoon.org/Spoons/FadeLogo.html][FadeLogo]] spoon simply s
 -- )
 #+end_src
 
-If you don't want to use FadeLogo, you can have a regular notification.
++If you don't want to use FadeLogo, you can have a regular notification.+
 
 #+begin_src lua
 hs.notify.show("Welcome to Hammerspoon", "Have fun!", "")
