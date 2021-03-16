@@ -127,6 +127,7 @@ function ims(name, etype, app)
          apps)
 
       if next(config) == nil then
+         hs.keycodes.setLayout("ABC")
       else
          local current = hs.keycodes.currentMethod()
          if (current == nil and string.match (config [1].im, "CN")) then
