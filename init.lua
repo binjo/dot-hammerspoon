@@ -130,9 +130,9 @@ function ims(name, etype, app)
          hs.keycodes.setLayout("ABC")
       else
          local current = hs.keycodes.currentMethod()
-         if (current == nil and string.match (config [1].im, "CN")) then
+         if (current == nil and string.find (config [1].im, "CN")) then
             hs.keycodes.setMethod("Squirrel")
-         elseif (current ~= nil and string.match (config [1].im, "EN")) then
+         elseif (current ~= nil and string.find (config [1].im, "EN")) then
             hs.keycodes.setLayout("ABC")
          end
       end
