@@ -37,17 +37,17 @@ Install:andUse("WindowHalfsAndThirds",
                }
 )
 
-Install:andUse("TextClipboardHistory",
-               {
-                 -- disable = false,
-                 config = {
-                   show_in_menubar = false,
-                 },
-                 hotkeys = {
-                   toggle_clipboard = { hyper, "h" } },
-                 start = true,
-               }
-)
+-- Install:andUse("TextClipboardHistory",
+--                {
+--                  -- disable = false,
+--                  config = {
+--                    show_in_menubar = false,
+--                  },
+--                  hotkeys = {
+--                    toggle_clipboard = { hyper, "h" } },
+--                  start = true,
+--                }
+-- )
 
 Install:andUse("Seal",
                {
